@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Home" />
-    <item android:title="Statistics" />
-    <item android:title="My details" />
+    <item
+        android:title="Home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:id="@+id/home"
+        />
+    <item
+        android:title="Statistics"
+        android:icon="@drawable/ic_baseline_show_chart_24"
+        android:id="@+id/statistics"
+        />
+    <item android:title="My details"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:id="@+id/details"
+        />
 </menu>

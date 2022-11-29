@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/20211706/AndroidStudioProjects/SmartWaterBottle/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/20211706/AndroidStudioProjects/SmartWaterBottle/app/src/main/res/layout/fragment_details.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/20211706/AndroidStudioProjects/SmartWaterBottle/app/src/main/res/layout/fragment_home.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/20211706/AndroidStudioProjects/SmartWaterBottle/app/src/main/res/layout/fragment_statistics.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/20211706/AndroidStudioProjects/SmartWaterBottle/app/src/main/res/menu/bottom_navmenu.xml" value="0.27447916666666666" />
       </map>
     </option>
