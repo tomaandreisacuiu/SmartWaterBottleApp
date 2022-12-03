@@ -23,7 +23,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-    static final UUID mUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    static final UUID mUUID = UUID.fromString("3cfc9609-f2be-4336-a58e-a5010a43559e");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        //BEGIN: BLUETOOTH CONNECTION
 
+        //BEGIN: BLUETOOTH CONNECTION
         BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         }
         System.out.println(btAdapter.getBondedDevices());
 
-        BluetoothDevice hc05 = btAdapter.getRemoteDevice("00:21:13:02:B6:5B");
+        BluetoothDevice hc05 = btAdapter.getRemoteDevice("3C:5A:B4:01:02:03");
         System.out.println(hc05.getName());
 
         BluetoothSocket btSocket = null;
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-         */
+        */
 
         InputStream inputStream = null;
         try {
@@ -101,14 +101,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         try {
             btSocket.close();
             System.out.println(btSocket.isConnected());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
     }
 

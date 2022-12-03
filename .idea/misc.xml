@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/20211706/AndroidStudioProjects/SmartWaterBottle/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.103" />
         <entry key="..\:/Users/20211706/AndroidStudioProjects/SmartWaterBottle/app/src/main/res/layout/activity_main.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/20211706/AndroidStudioProjects/SmartWaterBottle/app/src/main/res/layout/fragment_details.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/20211706/AndroidStudioProjects/SmartWaterBottle/app/src/main/res/layout/fragment_home.xml" value="0.27447916666666666" />
