@@ -7,11 +7,11 @@
         android:id="@+id/home"
         />
     <item
-        android:title="Statistics"
-        android:icon="@drawable/ic_baseline_show_chart_24"
+        android:title="Schedule"
+        android:icon="@drawable/ic_baseline_schedule_24"
         android:id="@+id/statistics"
         />
-    <item android:title="My details"
+    <item android:title="Settings"
         android:icon="@drawable/ic_baseline_person_24"
         android:id="@+id/details"
         />

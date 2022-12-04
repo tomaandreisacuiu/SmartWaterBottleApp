@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+
+        // NAVIGATION BOTTOM BAR MENU
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
 
@@ -47,7 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
+        // END OF NAVIGATION BOTTOM BAR MENU
 
+        // SHARE INTAKE GOAL BETWEEN FRAGMENTS
+
+        // END OF SHARE INTAKE GOAL BETWEEN FRAGMENTS
 
         //BEGIN: BLUETOOTH CONNECTION
         BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -78,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             //counter++;
-        } while (!btSocket.isConnected() );
+        } while (!btSocket.isConnected());
 
         /*
         try {
