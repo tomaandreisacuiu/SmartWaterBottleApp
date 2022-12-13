@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/schedule"
+            android:icon="@drawable/ic_baseline_schedule_24"
+            android:title="Schedule"
+            />
+        <item android:id="@+id/waterIntake"
+            android:icon="@drawable/ic_baseline_show_chart_24"
+            android:title="Water Intake Today"
+            />
+        <item android:id="@+id/setting"
+            android:icon="@drawable/ic_baseline_settings_24"
+            android:title="Settings"
+            />
+
+    </group>
+</menu>
