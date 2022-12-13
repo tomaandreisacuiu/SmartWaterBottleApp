@@ -9,7 +9,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -23,7 +28,16 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-    static final UUID mUUID = UUID.fromString("3cfc9609-f2be-4336-a58e-a5010a43559e");
+    //static final UUID mUUID = UUID.fromString("3cfc9609-f2be-4336-a58e-a5010a43559e");
+
+    final int ENABLE_BLUETOOTH_REQUEST_CODE = 1;
+
+    private BluetoothAdapter bluetoothAdapter;
+    private BluetoothLeScanner bleScanner;
+    private BluetoothGatt bleGatt;
+
+    private static final UUID UUID_Service = UUID.fromString("19fc95c0-c111–11e3–9904–0002a5d5c51b");
+    private static final UUID UUID_characteristic = UUID.fromString("21fac9e0-c111–11e3–9246–0002a5d5c51b");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,78 +65,19 @@ public class MainActivity extends AppCompatActivity {
         });
         // END OF NAVIGATION BOTTOM BAR MENU
 
-        // SHARE INTAKE GOAL BETWEEN FRAGMENTS
-
-        // END OF SHARE INTAKE GOAL BETWEEN FRAGMENTS
-
-        //BEGIN: BLUETOOTH CONNECTION
-        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        System.out.println(btAdapter.getBondedDevices());
-
-        BluetoothDevice hc05 = btAdapter.getRemoteDevice("3C:5A:B4:01:02:03");
-        System.out.println(hc05.getName());
-
-        BluetoothSocket btSocket = null;
-        //int counter = 0;
-        do {
-            try {
-                btSocket = hc05.createRfcommSocketToServiceRecord(mUUID);
-                System.out.println(btSocket);
-                btSocket.connect();
-                System.out.println(btSocket.isConnected());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //counter++;
-        } while (!btSocket.isConnected());
-
-        /*
-        try {
-            OutputStream outputStream = btSocket.getOutputStream();
-            outputStream.write(48);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
-
-        InputStream inputStream = null;
-        try {
-            inputStream = btSocket.getInputStream();
-            inputStream.skip(inputStream.available());
-
-            int b = inputStream.read();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            btSocket.close();
-            System.out.println(btSocket.isConnected());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothAdapter = bluetoothManager.getAdapter();
 
     }
 
-    private void replaceFragment(Fragment fragment) {
+
+        private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
 
-    //END: BLUETOOTH CONNECTION
+
 
 }
