@@ -22,6 +22,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 //import com.example.smartwaterbottle.databinding.ActivityMainBinding;
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onContextItemSelected(item);
     }
+
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +107,21 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        button = (Button) findViewById(R.id.editMyDetailsButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNewActivity();
+            }
+        });
     }
+
+    public void openNewActivity(){
+        Intent intent = new Intent(this, SetReminderActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     public void onBackPressed() {

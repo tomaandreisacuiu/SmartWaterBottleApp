@@ -17,4 +17,24 @@
         android:layout_gravity="start"
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <Button
+            android:id="@+id/editMyDetailsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADD MEDICINE REMINDER"
+            android:layout_marginTop="550sp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+
+
 </androidx.drawerlayout.widget.DrawerLayout>
