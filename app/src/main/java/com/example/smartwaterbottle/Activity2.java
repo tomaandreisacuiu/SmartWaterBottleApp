@@ -7,20 +7,31 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
 public class Activity2 extends AppCompatActivity {
 
-
+    // DECLARE OBJECTS
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
+    TextView weightTextView;
+    Button button;
+    TextView genderTextView;
+    TextView walkingView;
+    TextView cyclingView;
+    TextView runningView;
+    TextView gymView;
+    TextView swimView;
+    TextView suggested;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -30,16 +41,56 @@ public class Activity2 extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    Button button;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_2);
 
-//        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-//        bluetoothAdapter = bluetoothManager.getAdapter();
+        //SHARED PREFERANCES
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        String gender = prefs.getString("gender", "No gender selected");
 
+        // VARIABLES FOR TEXTVIEWS
+        int weight = prefs.getInt("weight", 80);
+        int walking = prefs.getInt("walking", 3);
+        int cycling = prefs.getInt("cycling", 2);
+        int running = prefs.getInt("running", 1);
+        int gym = prefs.getInt("gym", 0);
+        int swim = prefs.getInt("swim", 0);
+
+        // Display the gender in the TextView
+        genderTextView = findViewById(R.id.genderViewValue);
+        weightTextView = findViewById(R.id.weightViewValue);
+        walkingView = findViewById(R.id.walkingViewValue);
+        cyclingView = findViewById(R.id.cyclingViewValue);
+        runningView = findViewById(R.id.runningViewValue);
+        gymView = findViewById(R.id.gymViewValue);
+        swimView = findViewById(R.id.swimViewValue);
+        suggested = findViewById(R.id.intakeViewValue);
+
+        // SET TEXTS
+        genderTextView.setText(gender);
+        weightTextView.setText(String.valueOf(weight));
+        walkingView.setText(String.valueOf(walking));
+        cyclingView.setText(String.valueOf(cycling));
+        runningView.setText(String.valueOf(running));
+        gymView.setText(String.valueOf(gym));
+        swimView.setText(String.valueOf(swim));
+
+        // FORMULA FOR SUGGESTED WATER INTAKE GOAL
+        float intake = 0;
+        int male = 0; // initially a male
+
+        if ( !gender.equals("Male")) {
+            male = 1;
+        }
+
+        float helper = (walking*4 + cycling*8 + running*10 + gym*6 + swim*4)/7;
+        intake = (30*weight - 500*male + (weight*helper )) / 1000;
+
+        suggested.setText(String.valueOf(intake) + " L");
+
+        // DRAWER MENU
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
@@ -78,6 +129,7 @@ public class Activity2 extends AppCompatActivity {
             }
         });
 
+        // EDIT DETAILS BUTTON
         button = (Button) findViewById(R.id.editMyDetailsButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

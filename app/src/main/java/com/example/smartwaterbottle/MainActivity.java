@@ -36,18 +36,6 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    //ActivityMainBinding binding;
-    //static final UUID mUUID = UUID.fromString("3cfc9609-f2be-4336-a58e-a5010a43559e");
-
-//    final int ENABLE_BLUETOOTH_REQUEST_CODE = 1;
-//
-//    private BluetoothAdapter bluetoothAdapter;
-//    private BluetoothLeScanner bleScanner;
-//    private BluetoothGatt bleGatt;
-//
-//    private static final UUID UUID_Service = UUID.fromString("19fc95c0-c111–11e3–9904–0002a5d5c51b");
-//    private static final UUID UUID_characteristic = UUID.fromString("21fac9e0-c111–11e3–9246–0002a5d5c51b");
-
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
@@ -66,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-//        bluetoothAdapter = bluetoothManager.getAdapter();
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -107,14 +92,15 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        button = (Button) findViewById(R.id.editMyDetailsButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openNewActivity();
-            }
-        });
+//
+//        button = (Button) findViewById(R.id.editMyDetailsButton);
+//
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openNewActivity();
+//            }
+//        });
     }
 
     public void openNewActivity(){
