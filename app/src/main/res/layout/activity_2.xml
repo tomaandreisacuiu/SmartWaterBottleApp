@@ -8,15 +8,6 @@
     tools:context=".Activity2"
     >
 
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:headerLayout="@layout/header"
-        app:menu="@menu/main_menu"
-        android:id="@+id/nav_view"
-        android:layout_gravity="start"
-        />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -201,5 +192,14 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/main_menu"
+        android:id="@+id/nav_view"
+        android:layout_gravity="start"
+        />
 
 </androidx.drawerlayout.widget.DrawerLayout>

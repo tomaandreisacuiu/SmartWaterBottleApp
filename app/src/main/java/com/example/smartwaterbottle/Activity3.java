@@ -7,8 +7,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -19,6 +21,8 @@ public class Activity3 extends AppCompatActivity {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
+
+    TextView intakeViewValue;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -73,6 +77,17 @@ public class Activity3 extends AppCompatActivity {
                 return false;
             }
         });
+
+        // Display the suggested water intake level below
+        intakeViewValue = findViewById(R.id.textIntakeViewValue);
+        SharedPreferences prefs2 = getSharedPreferences("prefs2", MODE_PRIVATE);
+
+        float intake = prefs2.getFloat("intake", 2);
+        intakeViewValue = findViewById(R.id.textIntakeViewValue);
+
+        intakeViewValue.setText(String.valueOf(intake) + " L");
+
+
     }
 
     @Override
