@@ -2,10 +2,12 @@ package com.example.smartwaterbottle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -90,6 +92,13 @@ public class Activity2 extends AppCompatActivity {
 
         suggested.setText(String.valueOf(intake) + " L");
 
+        SharedPreferences prefs2 = getSharedPreferences("prefs2", MODE_PRIVATE);
+        SharedPreferences.Editor editor2 = prefs2.edit();
+
+        editor2.putFloat("intake", intake);
+
+        editor2.apply();
+
         // DRAWER MENU
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -152,4 +161,5 @@ public class Activity2 extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
 }

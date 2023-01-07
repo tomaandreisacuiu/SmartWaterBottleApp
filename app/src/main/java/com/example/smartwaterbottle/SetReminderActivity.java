@@ -35,44 +35,44 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
 
         findViewById(R.id.setBtn).setOnClickListener(this);
         findViewById(R.id.cancelBtn).setOnClickListener(this);
-
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.schedule:
-                    {
-                        Intent activity2Intent3 = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(activity2Intent3);
-                        //Toast.makeText(MainActivity.this, "Schedule Selected", Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-                    case R.id.waterIntake:
-                    {
-                        Intent activity2Intent2 = new Intent(getApplicationContext(), Activity3.class);
-                        startActivity(activity2Intent2);
-                        //Toast.makeText(MainActivity.this, "water Intake Selected", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    }
-                    case R.id.setting:
-                    {
-                        //Toast.makeText(MainActivity.this, "settings Selected", Toast.LENGTH_SHORT).show();
-                        Intent activity2Intent = new Intent(getApplicationContext(), Activity2.class);
-                        startActivity(activity2Intent);
-                        break;
-
-                    }
-                }
-                return false;
-            }
-        });
+//
+//        drawerLayout = findViewById(R.id.drawer_layout);
+//        navigationView = findViewById(R.id.nav_view);
+//        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+//        drawerLayout.addDrawerListener(drawerToggle);
+//        drawerToggle.syncState();
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                switch (item.getItemId()) {
+//                    case R.id.schedule:
+//                    {
+//                        Intent activity2Intent3 = new Intent(getApplicationContext(), MainActivity.class);
+//                        startActivity(activity2Intent3);
+//                        //Toast.makeText(MainActivity.this, "Schedule Selected", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    }
+//                    case R.id.waterIntake:
+//                    {
+//                        Intent activity2Intent2 = new Intent(getApplicationContext(), Activity3.class);
+//                        startActivity(activity2Intent2);
+//                        //Toast.makeText(MainActivity.this, "water Intake Selected", Toast.LENGTH_SHORT).show();
+//                        break;
+//
+//                    }
+//                    case R.id.setting:
+//                    {
+//                        //Toast.makeText(MainActivity.this, "settings Selected", Toast.LENGTH_SHORT).show();
+//                        Intent activity2Intent = new Intent(getApplicationContext(), Activity2.class);
+//                        startActivity(activity2Intent);
+//                        break;
+//
+//                    }
+//                }
+//                return false;
+//            }
+//        });
 
     }
 
@@ -120,10 +120,10 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public void openNewActivity(){
-        Intent intent = new Intent(this, SetReminderActivity.class);
-        startActivity(intent);
-    }
+//    public void openNewActivity(){
+//        Intent intent = new Intent(this, SetReminderActivity.class);
+//        startActivity(intent);
+//    }
 
 
     @Override

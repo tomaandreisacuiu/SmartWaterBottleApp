@@ -92,15 +92,15 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-//
-//        button = (Button) findViewById(R.id.editMyDetailsButton);
-//
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openNewActivity();
-//            }
-//        });
+
+        button = (Button) findViewById(R.id.editMyDetailsButton);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNewActivity();
+            }
+        });
     }
 
     public void openNewActivity(){
