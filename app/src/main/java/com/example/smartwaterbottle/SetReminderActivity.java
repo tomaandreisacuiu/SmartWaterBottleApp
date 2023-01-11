@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -22,60 +23,27 @@ import java.util.Calendar;
 
 public class SetReminderActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private int notificationId = 1;
+    //private int notificationId = 1;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
+    Switch repeatSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_reminder);
 
+        // BUTTONS SETUP
         findViewById(R.id.setBtn).setOnClickListener(this);
         findViewById(R.id.cancelBtn).setOnClickListener(this);
-//
-//        drawerLayout = findViewById(R.id.drawer_layout);
-//        navigationView = findViewById(R.id.nav_view);
-//        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-//        drawerLayout.addDrawerListener(drawerToggle);
-//        drawerToggle.syncState();
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.schedule:
-//                    {
-//                        Intent activity2Intent3 = new Intent(getApplicationContext(), MainActivity.class);
-//                        startActivity(activity2Intent3);
-//                        //Toast.makeText(MainActivity.this, "Schedule Selected", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    }
-//                    case R.id.waterIntake:
-//                    {
-//                        Intent activity2Intent2 = new Intent(getApplicationContext(), Activity3.class);
-//                        startActivity(activity2Intent2);
-//                        //Toast.makeText(MainActivity.this, "water Intake Selected", Toast.LENGTH_SHORT).show();
-//                        break;
-//
-//                    }
-//                    case R.id.setting:
-//                    {
-//                        //Toast.makeText(MainActivity.this, "settings Selected", Toast.LENGTH_SHORT).show();
-//                        Intent activity2Intent = new Intent(getApplicationContext(), Activity2.class);
-//                        startActivity(activity2Intent);
-//                        break;
-//
-//                    }
-//                }
-//                return false;
-//            }
-//        });
 
+        // SWITCH FOR REPEAT SETUP
+        repeatSwitch = findViewById(R.id.switch1);
     }
 
+    private int notificationIdCounter = 0;
 
     @Override
     public void onClick(View view) {
@@ -84,8 +52,9 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
 
         //Set notificaton ID and text
         Intent intent  = new Intent(SetReminderActivity.this, AlarmReceiver.class);
-        intent.putExtra("notificationId", notificationId);
+        intent.putExtra("notificationId", notificationIdCounter);
         intent.putExtra("todo", editText.getText().toString());
+        notificationIdCounter++;
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(SetReminderActivity.this,
                 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -103,7 +72,21 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
                 startTime.set(Calendar.SECOND, 0);
                 long alarmStartTime = startTime.getTimeInMillis();
 
-                alarm.set(AlarmManager.RTC_WAKEUP, alarmStartTime, alarmIntent);
+                //alarm.set(AlarmManager.RTC_WAKEUP, alarmStartTime, alarmIntent);
+
+                // BEGIN: CODE FOR REPEATING THE ALARM DAILY
+                long repeatInterval = AlarmManager.INTERVAL_DAY;
+                //long alarmStartTime;
+                //long repeatInterval = 600000;
+
+                if(repeatSwitch.isChecked()){
+                    alarm.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime, repeatInterval, alarmIntent);
+                    Toast.makeText(this, "Done! Alarm will repeat daily", Toast.LENGTH_SHORT).show();
+                } else {
+                    alarm.set(AlarmManager.RTC_WAKEUP, alarmStartTime, alarmIntent);
+                    Toast.makeText(this, "Done!", Toast.LENGTH_SHORT).show();
+                }
+                // END: CODE FOR REPEATING THE ALARM DAILY
 
                 Toast.makeText(this, "Done!", Toast.LENGTH_SHORT).show();
                 Intent activity2Intent3 = new Intent(getApplicationContext(), MainActivity.class);
@@ -119,12 +102,6 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
         }
 
     }
-
-//    public void openNewActivity(){
-//        Intent intent = new Intent(this, SetReminderActivity.class);
-//        startActivity(intent);
-//    }
-
 
     @Override
     public void onBackPressed() {
