@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SetReminderActivity"
@@ -26,25 +26,20 @@
         <TimePicker
             android:id="@+id/timePicker"
             android:layout_width="300dp"
-            android:layout_height="342dp"
-            android:layout_marginTop="20dp"
-            />
+            android:layout_height="342dp" />
 
         <Switch
             android:id="@+id/switch1"
             android:layout_width="183dp"
             android:layout_height="50dp"
             android:text="Repeat this daily"
-            android:layout_marginTop="30dp"
-            />
+            android:layout_marginTop="5dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            >
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/setBtn"
@@ -61,6 +56,11 @@
 
 
         </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_alarmsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 
     </LinearLayout>

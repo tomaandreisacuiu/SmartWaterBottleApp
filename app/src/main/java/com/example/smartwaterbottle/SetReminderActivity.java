@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -26,9 +27,10 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
     //private int notificationId = 1;
 
     DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    ActionBarDrawerToggle drawerToggle;
+//    NavigationView navigationView;
+//    ActionBarDrawerToggle drawerToggle;
     Switch repeatSwitch;
+    ListView lv_alarmsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,9 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
 
         // SWITCH FOR REPEAT SETUP
         repeatSwitch = findViewById(R.id.switch1);
+
+        // LISTVIEW SETUP
+        lv_alarmsList = findViewById(R.id.lv_alarmsList);
     }
 
     private int notificationIdCounter = 0;
@@ -50,6 +55,9 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
         EditText editText = findViewById(R.id.textEditMedicine);
         TimePicker timePicker = findViewById(R.id.timePicker);
 
+        // Create a unique request code for the PendingIntent
+        int requestCode = (int) System.currentTimeMillis();
+
         //Set notificaton ID and text
         Intent intent  = new Intent(SetReminderActivity.this, AlarmReceiver.class);
         intent.putExtra("notificationId", notificationIdCounter);
@@ -57,7 +65,7 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
         notificationIdCounter++;
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(SetReminderActivity.this,
-                0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
 
@@ -72,23 +80,36 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
                 startTime.set(Calendar.SECOND, 0);
                 long alarmStartTime = startTime.getTimeInMillis();
 
-                //alarm.set(AlarmManager.RTC_WAKEUP, alarmStartTime, alarmIntent);
+                //
+                DataBaseHelper dataBaseHelper;
+                AlarmModel alarmModel;
 
-                // BEGIN: CODE FOR REPEATING THE ALARM DAILY
+                // CODE FOR REPEATING THE ALARM DAILY
                 long repeatInterval = AlarmManager.INTERVAL_DAY;
-                //long alarmStartTime;
-                //long repeatInterval = 600000;
 
                 if(repeatSwitch.isChecked()){
-                    alarm.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime, repeatInterval, alarmIntent);
-                    Toast.makeText(this, "Done! Alarm will repeat daily", Toast.LENGTH_SHORT).show();
-                } else {
-                    alarm.set(AlarmManager.RTC_WAKEUP, alarmStartTime, alarmIntent);
-                    Toast.makeText(this, "Done!", Toast.LENGTH_SHORT).show();
-                }
-                // END: CODE FOR REPEATING THE ALARM DAILY
+                        alarmModel = new AlarmModel(-1, editText.getText().toString(),
+                                Calendar.HOUR_OF_DAY, Calendar.MINUTE, true);
 
-                Toast.makeText(this, "Done!", Toast.LENGTH_SHORT).show();
+                    alarm.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime, repeatInterval, alarmIntent);
+
+                    dataBaseHelper = new DataBaseHelper(SetReminderActivity.this);
+                    boolean success = dataBaseHelper.addOne(alarmModel);
+                    Toast.makeText(this, "Success = " + success, Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    alarmModel = new AlarmModel(-1, editText.getText().toString(),
+                            Calendar.HOUR_OF_DAY, Calendar.MINUTE, false);
+
+                    alarm.set(AlarmManager.RTC_WAKEUP, alarmStartTime, alarmIntent);
+
+                    dataBaseHelper = new DataBaseHelper(SetReminderActivity.this);
+                    boolean success = dataBaseHelper.addOne(alarmModel);
+                    Toast.makeText(this, "Success = " + success, Toast.LENGTH_LONG).show();
+
+                }
+
                 Intent activity2Intent3 = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(activity2Intent3);
                 break;

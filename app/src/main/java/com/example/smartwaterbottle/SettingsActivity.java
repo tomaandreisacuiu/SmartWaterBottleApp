@@ -65,14 +65,21 @@ public class SettingsActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openNewActivity();
+                //openNewActivity();
+
+                // SHARED PREFERENCES
+                SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+
                 String gender = genderSpinner.getSelectedItem().toString();
-                String weightString = weightEditText.getText().toString();
-                String walkingString = walkingEditText.getText().toString();
-                String cyclingString = cyclingEditText.getText().toString();
-                String runningString = runningEditText.getText().toString();
-                String gymString = gymEditText.getText().toString();
-                String swimString = swimEditText.getText().toString();
+
+                try {
+                    String weightString = weightEditText.getText().toString();
+                    String walkingString = walkingEditText.getText().toString();
+                    String cyclingString = cyclingEditText.getText().toString();
+                    String runningString = runningEditText.getText().toString();
+                    String gymString = gymEditText.getText().toString();
+                    String swimString = swimEditText.getText().toString();
 
                     int weight = Integer.parseInt(weightString);
                     int walking = Integer.parseInt(walkingString);
@@ -81,11 +88,6 @@ public class SettingsActivity extends AppCompatActivity {
                     int gym = Integer.parseInt(gymString);
                     int swim = Integer.parseInt(swimString);
 
-                    // SHARED PREFERENCES
-                    SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-
-                    // PUT STRINGS/ INTS IN EDITOR
                     editor.putString("gender", gender);
                     editor.putInt("weight", weight);
                     editor.putInt("walking", walking);
@@ -97,52 +99,24 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.apply();
                     openNewActivity();
 
+                    Toast.makeText(SettingsActivity.this, "Changes done!",
+                            Toast.LENGTH_LONG).show();
+
+                } catch (Exception e) {
+                    Toast.makeText(SettingsActivity.this, "Wrong input, try again",
+                            Toast.LENGTH_LONG).show();
+                }
+
             }
         });
-
-//        drawerLayout = findViewById(R.id.drawer_layout);
-//        navigationView = findViewById(R.id.nav_view);
-//        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-//        drawerLayout.addDrawerListener(drawerToggle);
-//        drawerToggle.syncState();
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.schedule:
-//                    {
-//                        Intent activity2Intent3 = new Intent(getApplicationContext(), MainActivity.class);
-//                        startActivity(activity2Intent3);
-//                        //Toast.makeText(MainActivity.this, "Schedule Selected", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    }
-//                    case R.id.waterIntake:
-//                    {
-//                        Intent activity2Intent2 = new Intent(getApplicationContext(), Activity3.class);
-//                        startActivity(activity2Intent2);
-//                        //Toast.makeText(MainActivity.this, "water Intake Selected", Toast.LENGTH_SHORT).show();
-//                        break;
-//
-//                    }
-//                    case R.id.setting:
-//                    {
-//                        //Toast.makeText(MainActivity.this, "settings Selected", Toast.LENGTH_SHORT).show();
-//                        Intent activity2Intent = new Intent(getApplicationContext(), Activity2.class);
-//                        startActivity(activity2Intent);
-//                        break;
-//
-//                    }
-//                }
-//                return false;
-//            }
-//        });
 
         // DISCARD CHANGES BUTTON
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openNewActivity();
+                Toast.makeText(SettingsActivity.this, "No changes were made",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
