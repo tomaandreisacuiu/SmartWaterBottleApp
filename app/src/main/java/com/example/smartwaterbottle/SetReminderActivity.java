@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class SetReminderActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -31,6 +33,7 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
 //    ActionBarDrawerToggle drawerToggle;
     Switch repeatSwitch;
     ListView lv_alarmsList;
+    Button btn_ViewAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,6 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
         repeatSwitch = findViewById(R.id.switch1);
 
         // LISTVIEW SETUP
-        lv_alarmsList = findViewById(R.id.lv_alarmsList);
     }
 
     private int notificationIdCounter = 0;
@@ -121,6 +123,7 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
                 startActivity(activity2Intent4);
                 break;
         }
+
 
     }
 

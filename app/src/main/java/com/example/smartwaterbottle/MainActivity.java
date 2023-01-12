@@ -23,7 +23,10 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 //import com.example.smartwaterbottle.databinding.ActivityMainBinding;
@@ -32,6 +35,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,11 +53,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     Button button;
+    Button btn_ViewAll;
+    View lv_alarmsList;
+    ArrayAdapter alarmsArrayAdapter;
+    DataBaseHelper dataBaseHelper;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //btn_ViewAll = findViewById(R.id.btn_ViewAll);
+        lv_alarmsList = findViewById(R.id.textView);
+        listView = (ListView) findViewById(R.id.listView);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -101,7 +114,34 @@ public class MainActivity extends AppCompatActivity {
                 openNewActivity();
             }
         });
+        
+        dataBaseHelper = new DataBaseHelper(MainActivity.this);
+        
+        alarmsArrayAdapter = new ArrayAdapter<AlarmModel>(MainActivity.this, android.R.layout.simple_list_item_1, dataBaseHelper.getEveryone());
+        listView.setAdapter(alarmsArrayAdapter);
+
+//        btn_ViewAll.setOnClickListener((v) -> {
+//            DataBaseHelper dataBaseHelper = new DataBaseHelper(MainActivity.this);
+//
+//            alarmsArrayAdapter = new ArrayAdapter<AlarmModel>(MainActivity.this, android.R.layout.simple_list_item_1, dataBaseHelper.getEveryone());
+//            listView.setAdapter(alarmsArrayAdapter);
+//
+//            //Toast.makeText(MainActivity.this, all.toString(), Toast.LENGTH_LONG).show();
+//        });
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AlarmModel clickedAlarm = (AlarmModel) parent.getItemAtPosition(position);
+                dataBaseHelper.deleteOne(clickedAlarm);
+                alarmsArrayAdapter = new ArrayAdapter<AlarmModel>(MainActivity.this, android.R.layout.simple_list_item_1, dataBaseHelper.getEveryone());
+                listView.setAdapter(alarmsArrayAdapter);
+                Toast.makeText(MainActivity.this, "Deleted! " + clickedAlarm.toString(), Toast.LENGTH_LONG).show();
+            }
+        });  
     }
+
 
     public void openNewActivity(){
         Intent intent = new Intent(this, SetReminderActivity.class);

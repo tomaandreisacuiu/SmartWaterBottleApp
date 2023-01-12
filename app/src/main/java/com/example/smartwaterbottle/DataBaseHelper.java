@@ -2,10 +2,15 @@ package com.example.smartwaterbottle;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.CpuUsageInfo;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -65,4 +70,57 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return true;
         }
     }
+
+    public List<AlarmModel> getEveryone() {
+        List<AlarmModel> returnList = new ArrayList<>();
+
+        // get data from the database
+        String queryString = "SELECT * FROM " + ALARMS_TABLE;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if (cursor.moveToFirst()) {
+            /**
+             * Here we loop through the cursor (result set) and create new alarm objects.
+             * We put them into the return list.
+              */
+            do {
+                int alarmID = cursor.getInt(0);
+                String alarmName = cursor.getString(1);
+                int alarmHour = cursor.getInt(2);
+                int alarmMinutes = cursor.getInt(3);
+                boolean alarmIsRepeating = cursor.getInt(4) == 1 ? true: false;
+
+                AlarmModel newAlarm = new AlarmModel(alarmID, alarmName, alarmHour, alarmMinutes,
+                        alarmIsRepeating);
+                returnList.add(newAlarm);
+
+            } while (cursor.moveToNext());
+
+        } else {
+            // failure. we do not add anything to the list.
+        }
+
+        // we close both the cursor and the database when we are done.
+        cursor.close();
+        db.close();
+        return returnList;
+    }
+
+    public boolean deleteOne(AlarmModel alarmModel) {
+        //find alarmModel in the database. if found -> delete it and return true.
+        // it not found -> return false
+        SQLiteDatabase db = this.getReadableDatabase();
+        String queryString = "DELETE FROM " + ALARMS_TABLE + " WHERE " + COLUMN_ID + " = " + alarmModel.getId();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if (cursor.moveToFirst()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

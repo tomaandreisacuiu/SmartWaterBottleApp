@@ -51,6 +51,14 @@ public class AlarmModel {
         isRepeating = repeating;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     // ToString METHOD
     @Override
     public String toString() {
