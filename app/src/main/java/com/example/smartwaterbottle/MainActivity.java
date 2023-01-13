@@ -120,16 +120,6 @@ public class MainActivity extends AppCompatActivity {
         alarmsArrayAdapter = new ArrayAdapter<AlarmModel>(MainActivity.this, android.R.layout.simple_list_item_1, dataBaseHelper.getEveryone());
         listView.setAdapter(alarmsArrayAdapter);
 
-//        btn_ViewAll.setOnClickListener((v) -> {
-//            DataBaseHelper dataBaseHelper = new DataBaseHelper(MainActivity.this);
-//
-//            alarmsArrayAdapter = new ArrayAdapter<AlarmModel>(MainActivity.this, android.R.layout.simple_list_item_1, dataBaseHelper.getEveryone());
-//            listView.setAdapter(alarmsArrayAdapter);
-//
-//            //Toast.makeText(MainActivity.this, all.toString(), Toast.LENGTH_LONG).show();
-//        });
-
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -139,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 listView.setAdapter(alarmsArrayAdapter);
                 Toast.makeText(MainActivity.this, "Deleted! " + clickedAlarm.toString(), Toast.LENGTH_LONG).show();
             }
-        });  
+        });
     }
 
 

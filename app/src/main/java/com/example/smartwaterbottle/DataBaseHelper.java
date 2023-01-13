@@ -20,6 +20,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_HOUR = "HOUR";
     public static final String COLUMN_MINUTE = "MINUTE";
     public static final String COLUMN_IS_REPEATING = "IS_REPEATING";
+    public static final String COLUMN_PILL_BOX = "BOX";
+    public static final String COLUMN_PILL_NUMBER = "PILL_NUMBER";
 
     public DataBaseHelper(@Nullable Context context) {
         super(context, "alarm_db", null, 1);
@@ -33,7 +35,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTableStatement = "CREATE TABLE " + ALARMS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MEDICINE_NAME + " TEXT, " + COLUMN_HOUR + " INT, " + COLUMN_MINUTE + " INT, " + COLUMN_IS_REPEATING + " BOOL)";
+        String createTableStatement = "CREATE TABLE " + ALARMS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MEDICINE_NAME + " TEXT, " + COLUMN_HOUR + " INT, " + COLUMN_MINUTE + " INT, " + COLUMN_IS_REPEATING + " BOOL, " + COLUMN_PILL_BOX + " TEXT, " + COLUMN_PILL_NUMBER + " TEXT)";
 
         sqLiteDatabase.execSQL(createTableStatement);
     }
@@ -62,6 +64,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_HOUR, alarmModel.getHour());
         cv.put(COLUMN_MINUTE, alarmModel.getMinutes());
         cv.put(COLUMN_IS_REPEATING, alarmModel.isRepeating());
+        cv.put(COLUMN_PILL_BOX, alarmModel.getPill_Container());
+        cv.put(COLUMN_PILL_NUMBER, alarmModel.getpill_Number());
 
         long insert = db.insert(ALARMS_TABLE, null, cv);
         if (insert == -1) {
@@ -91,9 +95,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 int alarmHour = cursor.getInt(2);
                 int alarmMinutes = cursor.getInt(3);
                 boolean alarmIsRepeating = cursor.getInt(4) == 1 ? true: false;
+                String alarmPillBox = cursor.getString(5);
+                String alarmPillNumber = cursor.getString(6);
 
                 AlarmModel newAlarm = new AlarmModel(alarmID, alarmName, alarmHour, alarmMinutes,
-                        alarmIsRepeating);
+                        alarmIsRepeating, alarmPillBox, alarmPillNumber);
                 returnList.add(newAlarm);
 
             } while (cursor.moveToNext());

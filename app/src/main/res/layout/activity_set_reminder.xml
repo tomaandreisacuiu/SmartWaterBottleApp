@@ -11,7 +11,7 @@
         tools:context=".SetReminderActivity"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:padding="20dp">
+        android:padding="0dp">
 
         <EditText
             android:id="@+id/textEditMedicine"
@@ -22,6 +22,26 @@
             android:hint="Enter medicine name"
             android:imeOptions="actionDone"
             android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/textEditPills"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Number of pills"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:singleLine="true"
+            />
+
+        <Spinner
+            android:id="@+id/spinnerPillBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/pill_boxes"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            />
 
         <TimePicker
             android:id="@+id/timePicker"
@@ -53,8 +73,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CANCEL" />
-
-
 
         </LinearLayout>
 

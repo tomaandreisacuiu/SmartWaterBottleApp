@@ -12,9 +12,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -29,11 +31,7 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
     //private int notificationId = 1;
 
     DrawerLayout drawerLayout;
-//    NavigationView navigationView;
-//    ActionBarDrawerToggle drawerToggle;
     Switch repeatSwitch;
-    ListView lv_alarmsList;
-    Button btn_ViewAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,6 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
         // SWITCH FOR REPEAT SETUP
         repeatSwitch = findViewById(R.id.switch1);
 
-        // LISTVIEW SETUP
     }
 
     private int notificationIdCounter = 0;
@@ -56,6 +53,8 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         EditText editText = findViewById(R.id.textEditMedicine);
         TimePicker timePicker = findViewById(R.id.timePicker);
+        Spinner spinnerPillBox = findViewById(R.id.spinnerPillBox);
+        EditText textEditPills = findViewById(R.id.textEditPills);
 
         // Create a unique request code for the PendingIntent
         int requestCode = (int) System.currentTimeMillis();
@@ -70,6 +69,11 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
                 requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.pill_boxes, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPillBox.setAdapter(adapter);
 
         switch (view.getId()) {
             case R.id.setBtn:
@@ -91,7 +95,8 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
 
                 if(repeatSwitch.isChecked()){
                         alarmModel = new AlarmModel(-1, editText.getText().toString(),
-                                Calendar.HOUR_OF_DAY, Calendar.MINUTE, true);
+                                Calendar.HOUR_OF_DAY, Calendar.MINUTE, true,
+                                spinnerPillBox.getSelectedItem().toString(), textEditPills.getText().toString());
 
                     alarm.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime, repeatInterval, alarmIntent);
 
@@ -102,7 +107,8 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
                 } else {
 
                     alarmModel = new AlarmModel(-1, editText.getText().toString(),
-                            Calendar.HOUR_OF_DAY, Calendar.MINUTE, false);
+                            Calendar.HOUR_OF_DAY, Calendar.MINUTE, false,
+                            spinnerPillBox.getSelectedItem().toString(), textEditPills.getText().toString());
 
                     alarm.set(AlarmManager.RTC_WAKEUP, alarmStartTime, alarmIntent);
 
@@ -123,7 +129,6 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
                 startActivity(activity2Intent4);
                 break;
         }
-
 
     }
 

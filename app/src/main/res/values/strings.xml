@@ -13,4 +13,14 @@
         <item>Female</item>
     </string-array>
 
+    <string-array name="pill_boxes">
+        <item>No box selected</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+    </string-array>
+
+
 </resources>
