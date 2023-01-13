@@ -29,7 +29,6 @@ import java.util.List;
 public class SetReminderActivity extends AppCompatActivity implements View.OnClickListener{
 
     //private int notificationId = 1;
-
     DrawerLayout drawerLayout;
     Switch repeatSwitch;
 
@@ -44,7 +43,6 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
 
         // SWITCH FOR REPEAT SETUP
         repeatSwitch = findViewById(R.id.switch1);
-
     }
 
     private int notificationIdCounter = 0;
@@ -62,7 +60,9 @@ public class SetReminderActivity extends AppCompatActivity implements View.OnCli
         //Set notificaton ID and text
         Intent intent  = new Intent(SetReminderActivity.this, AlarmReceiver.class);
         intent.putExtra("notificationId", notificationIdCounter);
-        intent.putExtra("todo", editText.getText().toString());
+        intent.putExtra("todo", "Take " + textEditPills.getText().toString() +
+                " pills of " + editText.getText().toString() + " from box " +
+                spinnerPillBox.getSelectedItem().toString());
         notificationIdCounter++;
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(SetReminderActivity.this,

@@ -83,14 +83,11 @@ public class AlarmModel {
     // ToString METHOD
     @Override
     public String toString() {
-        return "AlarmModel{" +
-                "medicine_Name='" + medicine_Name + '\'' +
-                ", hour=" + hour +
-                ", minutes=" + minutes +
-                ", isRepeating=" + isRepeating +
-                ", pillBox=" + pill_Container +
-                ", pillNumber=" + pill_Number +
-                '}';
+        return  "Medicine: " + medicine_Name + '\n' +
+                "Time: " + hour + ":" + minutes + '\n' +
+                "Repeating daily: " + isRepeating + '\n' +
+                "Pill box: " + pill_Container + '\n' +
+                "Number of pills: " + pill_Number + '\n';
     }
 
 }
