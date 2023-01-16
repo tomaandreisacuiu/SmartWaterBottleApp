@@ -14,10 +14,22 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textViewBT1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:gravity="center_horizontal"
+            android:text="..."
+            android:textColor="@color/purple_500"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+        <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="50dp"
             android:gravity="center_horizontal"
             android:text="Water intake today:"
             android:textColor="@color/purple_500"
@@ -26,12 +38,12 @@
             android:layout_gravity="center"/>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textIntakeBT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
-            android:text=" --.-- L"
+            android:text="--.-- L"
             android:textColor="@color/purple_200"
             android:textSize="70dp"
             android:textStyle="bold"
