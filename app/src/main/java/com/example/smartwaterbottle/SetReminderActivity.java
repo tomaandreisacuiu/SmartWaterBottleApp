@@ -28,7 +28,6 @@ import java.util.List;
 
 public class SetReminderActivity extends AppCompatActivity implements View.OnClickListener{
 
-    //private int notificationId = 1;
     DrawerLayout drawerLayout;
     Switch repeatSwitch;
 
