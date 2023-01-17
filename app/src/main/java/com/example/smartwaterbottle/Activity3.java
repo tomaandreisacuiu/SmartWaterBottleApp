@@ -15,11 +15,13 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -50,8 +52,9 @@ public class Activity3<a5010a43559> extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_BLUETOOTH = 1;
 
-    private static final UUID serviceUUID = UUID.fromString("3cfc9609-f2be-4336-a58e-a5010a43559f");
+    private static final UUID serviceUUID = UUID.fromString("3cfc9609-f2be-4336-a58e-a5010a43559e");
     private static final UUID characteristicUUID = UUID.fromString("8edb60b0-0b93-4403-8e39-44f1abf18e93");
+    private static final UUID getCharacteristicUUIDCurrIntake = UUID.fromString("6d29b2f4-5726-4e37-9658-762311292d45");
 
     private BluetoothDevice device;
     private BluetoothGatt mBluetoothGatt;
@@ -63,6 +66,138 @@ public class Activity3<a5010a43559> extends AppCompatActivity {
         }
         return super.onContextItemSelected(item);
     }
+
+
+    private void connectDevice() {
+        System.out.println("reached here 1");
+
+        BluetoothManager manager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter adapter = manager.getAdapter();
+        BluetoothLeScanner scanner = adapter.getBluetoothLeScanner();
+        ScanCallback scanCallback = new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                super.onScanResult(callbackType, result);
+                BluetoothDevice device = result.getDevice();
+                if (ActivityCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(Activity3.this,
+                            new String[]{Manifest.permission.BLUETOOTH},
+                            MY_PERMISSIONS_REQUEST_BLUETOOTH);
+                }
+                String deviceName = device.getName();
+                if (deviceName != null && deviceName.equals("Water Bottle Code_Near")) {
+                    System.out.println("reached here 2");
+
+                    scanner.stopScan(this);
+                    mBluetoothGatt = device.connectGatt(Activity3.this, false, mGattCallback);
+
+                    System.out.println("reached here 2.1");
+
+                }
+            }
+        };
+        scanner.startScan(scanCallback);
+    }
+
+    private void readCharacteristicValue(BluetoothGattCharacteristic characteristic) {
+        System.out.println("reached here 3");
+
+        if (mBluetoothGatt == null || characteristic == null) {
+            textViewIntakeValue.setText("null");
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Activity3.this, new String[]{Manifest.permission.BLUETOOTH}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
+        }
+        mBluetoothGatt.readCharacteristic(characteristic);
+    }
+
+    private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            super.onConnectionStateChange(gatt, status, newState);
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                if (ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                System.out.println("reached here 4");
+                gatt.discoverServices();
+            }
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            System.out.println("reached here 5");
+
+            super.onServicesDiscovered(gatt, status);
+            BluetoothGattService service = gatt.getService(serviceUUID);
+
+            System.out.println(service.toString());
+
+            BluetoothGattCharacteristic characteristic = service.getCharacteristic(getCharacteristicUUIDCurrIntake);
+            System.out.println("got the characteristic");
+
+            if (ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+                // Permission is not granted, request it
+                ActivityCompat.requestPermissions(Activity3.this, new String[]{Manifest.permission.BLUETOOTH}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
+            } else {
+                // Permission has already been granted, call setCharacteristicNotification
+                mBluetoothGatt.setCharacteristicNotification(characteristic, true);
+            }
+
+
+            readCharacteristicValue(characteristic);
+
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                System.out.println("reached here 7.2");
+
+                //String characteristicValue = new String(characteristic.getValue().toString());
+                //textViewIntakeValue = findViewById(R.id.textIntakeBT);
+                textViewIntakeValue = findViewById(R.id.textIntakeBT);
+                textViewIntakeValue.setText("null");
+
+                //byte[] value = characteristic.getValue();
+                if (characteristic.getValue() != null) {
+
+                    System.out.println(characteristic.getValue());
+
+                    System.out.println(characteristic.getValue().toString());
+
+                    String characteristicValue = new String(characteristic.getValue().toString());
+                    //textViewIntakeValue = findViewById(R.id.textIntakeBT);
+                    textViewIntakeValue.setText(characteristicValue);
+                }
+
+                System.out.println("reached here 8");
+
+            }
+
+            System.out.println("reached here 6");
+
+        }
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt,
+                                         BluetoothGattCharacteristic characteristic,
+                                         int status) {
+            System.out.println("reached here 7.1");
+
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                System.out.println("reached here 7.2");
+
+                byte[] value = characteristic.getValue();
+                System.out.println(new String(value));
+
+                String characteristicValue = new String(value);
+                textViewIntakeValue = findViewById(R.id.textIntakeBT);
+                textViewIntakeValue.setText(characteristicValue);
+
+                System.out.println("reached here 8");
+
+            }
+        }
+    };
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -116,7 +251,6 @@ public class Activity3<a5010a43559> extends AppCompatActivity {
         // END: Display the suggested water intake level below
 
         textViewBT = findViewById(R.id.textViewBT1);
-        textViewIntakeValue = findViewById(R.id.textIntakeBT);
         //textViewBT.setText("NO");
 
         // Request the BLUETOOTH permission
@@ -178,97 +312,15 @@ public class Activity3<a5010a43559> extends AppCompatActivity {
                 return;
             }
 
-            // Connect to the device
-            mBluetoothGatt = device.connectGatt(this, true, new BluetoothGattCallback() {
-                @Override
-                public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-                    if (status == BluetoothGatt.GATT_SUCCESS) {
-                        BluetoothGattService service = mBluetoothGatt.getService(serviceUUID);
-                        if (service == null) {
-                            Toast.makeText(Activity3.this, "Service not found", Toast.LENGTH_SHORT).show();
-                            System.out.println("Service not found");
-                            return;
-                        }
-                        BluetoothGattCharacteristic characteristic = service.getCharacteristic(characteristicUUID);
-                        if (characteristic == null) {
-                            Toast.makeText(Activity3.this, "Characteristic not found", Toast.LENGTH_SHORT).show();
-                            System.out.println("Characteristic not found");
-                            return;
-                        }
-
-                        // Check if the required permissions are granted
-                        if (ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
-                                ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-                            // Request the permissions
-                            ActivityCompat.requestPermissions(Activity3.this, new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
-                        } else {
-                            // Permissions are granted, you can call readCharacteristic()
-                            if (!mBluetoothGatt.readCharacteristic(characteristic)) {
-                                Toast.makeText(Activity3.this, "Failed to read characteristic", Toast.LENGTH_SHORT).show();
-                                System.out.println("Failed to read characteristic");
-                            }
-                        }
-                    } else {
-                        Toast.makeText(Activity3.this, "Failed to discover services", Toast.LENGTH_SHORT).show();
-                        System.out.println("Failed to discover services");
-
-                    }
-
-                }
-
-                @Override
-                public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-                    if (status == BluetoothGatt.GATT_SUCCESS) {
-                        byte[] value = characteristic.getValue();
-                        textViewIntakeValue.setText(new String(value));
-                    } else {
-                        Toast.makeText(Activity3.this, "Failed to read characteristic", Toast.LENGTH_SHORT).show();
-                        System.out.println("Failed to read characteristic");
-                    }
-                }
-
-                @Override
-                public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-                    if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                        if (ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
-                                ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-                            // Request the permissions
-                            ActivityCompat.requestPermissions(Activity3.this, new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
-                        } else {
-                            // Permissions are granted, you can call close()
-                            if (mBluetoothGatt != null) {
-                                mBluetoothGatt.close();
-                                mBluetoothGatt = null;
-                            }
-                        }
-                        Toast.makeText(Activity3.this, "Device disconnected", Toast.LENGTH_SHORT).show();
-                        System.out.println("Device disconeected");
-                    }
-                }
-            });
         }
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mBluetoothGatt != null) {
-            // Check if the required permissions are granted
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-                // Request the permissions
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
-            } else {
-                // Permissions are granted, you can call close()
-                if (mBluetoothGatt != null) {
-                    mBluetoothGatt.close();
-                    mBluetoothGatt = null;
-                }
-            }
-
-            //mBluetoothGatt = null;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
+        } else {
+            connectDevice();
+            System.out.println("Connecting");
         }
+
     }
 
     @Override
