@@ -37,7 +37,6 @@
             android:id="@+id/spinnerPillBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/pill_boxes"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"

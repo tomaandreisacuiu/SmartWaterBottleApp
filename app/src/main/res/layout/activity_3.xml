@@ -14,14 +14,26 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textViewBT1"
+            android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:gravity="center_horizontal"
-            android:text="..."
+            android:text="Paired devices via BT and BLE:"
             android:textColor="@color/purple_500"
-            android:textSize="35dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/textViewBT1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal"
+            android:text="..."
+            android:textColor="@color/purple_200"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:layout_gravity="center"/>
 
@@ -29,11 +41,11 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:text="Water intake today:"
             android:textColor="@color/purple_500"
-            android:textSize="35dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:layout_gravity="center"/>
 
@@ -45,7 +57,7 @@
             android:gravity="center_horizontal"
             android:text="--.-- L"
             android:textColor="@color/purple_200"
-            android:textSize="70dp"
+            android:textSize="50dp"
             android:textStyle="bold"
             android:layout_gravity="center"/>
 
@@ -57,7 +69,7 @@
             android:gravity="center_horizontal"
             android:text="Your personal water intake goal:"
             android:textColor="@color/purple_500"
-            android:textSize="35dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:layout_gravity="center"/>
 
@@ -69,7 +81,7 @@
             android:gravity="center_horizontal"
             android:text="--.-- L"
             android:textColor="@color/purple_200"
-            android:textSize="70dp"
+            android:textSize="50dp"
             android:textStyle="bold"
             android:layout_gravity="center"/>
 

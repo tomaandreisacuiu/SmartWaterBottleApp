@@ -13,6 +13,9 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -35,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
-public class Activity3 extends AppCompatActivity {
+public class Activity3<a5010a43559> extends AppCompatActivity {
 
     // CREATE OBJECTS
     DrawerLayout drawerLayout;
@@ -43,8 +46,15 @@ public class Activity3 extends AppCompatActivity {
     ActionBarDrawerToggle drawerToggle;
     TextView intakeViewValue;
     TextView textViewBT;
+    TextView textViewIntakeValue;
 
-   private static final int MY_PERMISSIONS_REQUEST_BLUETOOTH = 1;
+    private static final int MY_PERMISSIONS_REQUEST_BLUETOOTH = 1;
+
+    private static final UUID serviceUUID = UUID.fromString("3cfc9609-f2be-4336-a58e-a5010a43559f");
+    private static final UUID characteristicUUID = UUID.fromString("8edb60b0-0b93-4403-8e39-44f1abf18e93");
+
+    private BluetoothDevice device;
+    private BluetoothGatt mBluetoothGatt;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -106,6 +116,7 @@ public class Activity3 extends AppCompatActivity {
         // END: Display the suggested water intake level below
 
         textViewBT = findViewById(R.id.textViewBT1);
+        textViewIntakeValue = findViewById(R.id.textIntakeBT);
         //textViewBT.setText("NO");
 
         // Request the BLUETOOTH permission
@@ -118,22 +129,147 @@ public class Activity3 extends AppCompatActivity {
         } else {
             // Permission is granted, proceed
             BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+
             if (btAdapter == null) {
                 System.out.println("Device does not support Bluetooth");
+                Toast.makeText(this, "Device does not support Bluetooth", Toast.LENGTH_SHORT).show();
+                return;
             } else if (!btAdapter.isEnabled()) {
                 System.out.println("Please turn on Bluetooth");
-            } else {
-                System.out.println(btAdapter.getBondedDevices());
+                Toast.makeText(this, "Bluetooth is not enabled", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                for (BluetoothDevice device : btAdapter.getBondedDevices()) {
-                    System.out.println(device.getName());
+            Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+
+            if (pairedDevices == null) {
+                Toast.makeText(this, "No device found", Toast.LENGTH_SHORT).show();
+                System.out.println("No device found");
+                return;
+            }
+
+            // check in the terminal if the result is good
+            System.out.println(pairedDevices);
+            for (BluetoothDevice device : pairedDevices) {
+                System.out.println(device.getName());
+            }
+            // end checking
+
+            // putting all the bonded devices in a textview
+            StringBuilder sb = new StringBuilder();
+            for (BluetoothDevice device : pairedDevices) {
+                sb.append(device.getName() + "\n");
+            }
+            textViewBT.setText(sb.toString());
+            // end putting bonded devices in textview
+
+            // Find the device we want to connect to
+            for (BluetoothDevice d : pairedDevices) {
+                if (d.getName().equals("Water Bottle Code_Near")) {
+                    device = d;
+                    System.out.println("DEVICE FOUND!");
+                    break;
                 }
             }
 
+            if (device == null) {
+                Toast.makeText(this, "Device not found", Toast.LENGTH_LONG).show();
+                System.out.println("Device not found");
+                return;
+            }
+
+            // Connect to the device
+            mBluetoothGatt = device.connectGatt(this, true, new BluetoothGattCallback() {
+                @Override
+                public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+                    if (status == BluetoothGatt.GATT_SUCCESS) {
+                        BluetoothGattService service = mBluetoothGatt.getService(serviceUUID);
+                        if (service == null) {
+                            Toast.makeText(Activity3.this, "Service not found", Toast.LENGTH_SHORT).show();
+                            System.out.println("Service not found");
+                            return;
+                        }
+                        BluetoothGattCharacteristic characteristic = service.getCharacteristic(characteristicUUID);
+                        if (characteristic == null) {
+                            Toast.makeText(Activity3.this, "Characteristic not found", Toast.LENGTH_SHORT).show();
+                            System.out.println("Characteristic not found");
+                            return;
+                        }
+
+                        // Check if the required permissions are granted
+                        if (ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+                                ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+                            // Request the permissions
+                            ActivityCompat.requestPermissions(Activity3.this, new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
+                        } else {
+                            // Permissions are granted, you can call readCharacteristic()
+                            if (!mBluetoothGatt.readCharacteristic(characteristic)) {
+                                Toast.makeText(Activity3.this, "Failed to read characteristic", Toast.LENGTH_SHORT).show();
+                                System.out.println("Failed to read characteristic");
+                            }
+                        }
+                    } else {
+                        Toast.makeText(Activity3.this, "Failed to discover services", Toast.LENGTH_SHORT).show();
+                        System.out.println("Failed to discover services");
+
+                    }
+
+                }
+
+                @Override
+                public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+                    if (status == BluetoothGatt.GATT_SUCCESS) {
+                        byte[] value = characteristic.getValue();
+                        textViewIntakeValue.setText(new String(value));
+                    } else {
+                        Toast.makeText(Activity3.this, "Failed to read characteristic", Toast.LENGTH_SHORT).show();
+                        System.out.println("Failed to read characteristic");
+                    }
+                }
+
+                @Override
+                public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                    if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                        if (ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+                                ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+                            // Request the permissions
+                            ActivityCompat.requestPermissions(Activity3.this, new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
+                        } else {
+                            // Permissions are granted, you can call close()
+                            if (mBluetoothGatt != null) {
+                                mBluetoothGatt.close();
+                                mBluetoothGatt = null;
+                            }
+                        }
+                        Toast.makeText(Activity3.this, "Device disconnected", Toast.LENGTH_SHORT).show();
+                        System.out.println("Device disconeected");
+                    }
+                }
+            });
         }
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mBluetoothGatt != null) {
+            // Check if the required permissions are granted
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+                // Request the permissions
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
+            } else {
+                // Permissions are granted, you can call close()
+                if (mBluetoothGatt != null) {
+                    mBluetoothGatt.close();
+                    mBluetoothGatt = null;
+                }
+            }
+
+            //mBluetoothGatt = null;
+        }
+    }
 
     @Override
     public void onBackPressed() {
