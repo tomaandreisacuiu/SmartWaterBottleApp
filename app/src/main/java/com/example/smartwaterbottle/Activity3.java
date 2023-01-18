@@ -68,35 +68,55 @@ public class Activity3<a5010a43559> extends AppCompatActivity {
     }
 
 
-    private void connectDevice() {
+    private void connectDevice(String deviceName) {
         System.out.println("reached here 1");
 
-        BluetoothManager manager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothAdapter adapter = manager.getAdapter();
-        BluetoothLeScanner scanner = adapter.getBluetoothLeScanner();
-        ScanCallback scanCallback = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, ScanResult result) {
-                super.onScanResult(callbackType, result);
-                BluetoothDevice device = result.getDevice();
-                if (ActivityCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(Activity3.this,
-                            new String[]{Manifest.permission.BLUETOOTH},
-                            MY_PERMISSIONS_REQUEST_BLUETOOTH);
-                }
-                String deviceName = device.getName();
-                if (deviceName != null && deviceName.equals("Water Bottle Code_Near")) {
+        //BluetoothManager manager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+       // BluetoothAdapter adapter = manager.getAdapter();
+        //BluetoothLeScanner scanner = adapter.getBluetoothLeScanner();
+//        ScanCallback scanCallback = new ScanCallback() {
+//            @Override
+//            public void onScanResult(int callbackType, ScanResult result) {
+//                super.onScanResult(callbackType, result);
+//                BluetoothDevice device = result.getDevice();
+//                if (ActivityCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+//                    ActivityCompat.requestPermissions(Activity3.this,
+//                            new String[]{Manifest.permission.BLUETOOTH},
+//                            MY_PERMISSIONS_REQUEST_BLUETOOTH);
+//                }
+//                String deviceName = device.getName();
+//                if (deviceName != null && deviceName.equals("Smart Water Bottle")) {
+//                    System.out.println("reached here 2");
+//
+//                    scanner.stopScan(this);
+//                    mBluetoothGatt = device.connectGatt(Activity3.this, false, mGattCallback);
+//
+//                    System.out.println("reached here 2.1");
+//
+//                }
+//            }
+//        };
+//        scanner.startScan(scanCallback);
+//
+
+        if (ActivityCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Activity3.this,
+                    new String[]{Manifest.permission.BLUETOOTH},
+                    MY_PERMISSIONS_REQUEST_BLUETOOTH);
+        }
+
+        //String deviceName = device.getName();
+
+        if (deviceName != null && deviceName.equals("Smart Water Bottle")) {
                     System.out.println("reached here 2");
 
-                    scanner.stopScan(this);
+                    //scanner.stopScan(this);
                     mBluetoothGatt = device.connectGatt(Activity3.this, false, mGattCallback);
 
                     System.out.println("reached here 2.1");
 
                 }
-            }
-        };
-        scanner.startScan(scanCallback);
+
     }
 
     private void readCharacteristicValue(BluetoothGattCharacteristic characteristic) {
@@ -134,7 +154,7 @@ public class Activity3<a5010a43559> extends AppCompatActivity {
 
             System.out.println(service.toString());
 
-            BluetoothGattCharacteristic characteristic = service.getCharacteristic(getCharacteristicUUIDCurrIntake);
+            BluetoothGattCharacteristic characteristic = service.getCharacteristic(characteristicUUID);
             System.out.println("got the characteristic");
 
             if (ContextCompat.checkSelfPermission(Activity3.this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
@@ -153,8 +173,8 @@ public class Activity3<a5010a43559> extends AppCompatActivity {
 
                 //String characteristicValue = new String(characteristic.getValue().toString());
                 //textViewIntakeValue = findViewById(R.id.textIntakeBT);
-                textViewIntakeValue = findViewById(R.id.textIntakeBT);
-                textViewIntakeValue.setText("null");
+                //textViewIntakeValue = findViewById(R.id.textIntakeBT);
+                System.out.println("null");
 
                 //byte[] value = characteristic.getValue();
                 if (characteristic.getValue() != null) {
@@ -299,7 +319,7 @@ public class Activity3<a5010a43559> extends AppCompatActivity {
 
             // Find the device we want to connect to
             for (BluetoothDevice d : pairedDevices) {
-                if (d.getName().equals("Water Bottle Code_Near")) {
+                if (d.getName().equals("Smart Water Bottle")) {
                     device = d;
                     System.out.println("DEVICE FOUND!");
                     break;
@@ -317,7 +337,7 @@ public class Activity3<a5010a43559> extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_BLUETOOTH);
         } else {
-            connectDevice();
+            connectDevice(device.getName());
             System.out.println("Connecting");
         }
 
